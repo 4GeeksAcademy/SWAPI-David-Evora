@@ -22,7 +22,7 @@ class Planet(db.Model):
             "id": self.id,
             "name": self.name,
             "gravity": self.gravity or "Unknown",
-            "population": self.gravity or "Unknown",
+            "population": self.population or "Unknown",
             "created": self.created,
             "edited": self.edited,
         })

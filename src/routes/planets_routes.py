@@ -24,8 +24,7 @@ def getPlanetsList():
 
 @planets.route("/planets/<int:id>", methods=["GET"])
 def getPlanet(id):
-    query = select(Planet)
-    response = db.session.execute(query).where(Planet.id == id).scalar()
+    response = db.session.execute(select(Planet).where(Planet.id == id)).scalar()
 
     if not response:
         return jsonify({"Error": "Planet not found"}), 404

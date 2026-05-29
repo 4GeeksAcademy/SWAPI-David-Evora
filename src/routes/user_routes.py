@@ -22,7 +22,7 @@ def getUsersList():
             "username": user.username,
             "email": user.email,
             "created": user.created,
-            "favorites": user.favorites
+            "favorites": [fav.to_dict() for fav in user.favorites]
         })
 
     return jsonify(users_list)
@@ -30,7 +30,7 @@ def getUsersList():
 @user.route("/users/favorites", methods=["GET"])
 @jwt_required()
 def getUserFavorite():
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
 
     user = db.session.get(User, user_id)
 

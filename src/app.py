@@ -11,7 +11,7 @@ from routes.auth_routes import auth
 from routes.user_routes import user
 from routes.planets_routes import planets
 from routes.people_routes import people
-from routes.favorite_routes import favorites
+from routes.favorite_routes import favorite
 
 app = Flask(__name__)
 jwt = JWTManager(app)
@@ -35,7 +35,7 @@ app.register_blueprint(auth)
 app.register_blueprint(user)
 app.register_blueprint(people)
 app.register_blueprint(planets)
-app.register_blueprint(favorites)
+app.register_blueprint(favorite)
 
 setup_admin(app)
 
