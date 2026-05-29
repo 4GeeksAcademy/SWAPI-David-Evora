@@ -9,7 +9,7 @@ favorite = Blueprint("favorite", __name__)
 @favorite.route("/favorite/planet/<int:planet_id>", methods=["POST"])
 @jwt_required()
 def addFavoritePlanet(planet_id):
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
 
     user = db.session.get(User, user_id)
 
@@ -19,7 +19,16 @@ def addFavoritePlanet(planet_id):
     planet = db.session.get(Planet, planet_id)
 
     if not planet:
-        return jsonify({"Error": "Planet not found"}), 404    
+        return jsonify({"Error": "Planet not found"}), 404  
+    
+    existing_favorite = db.session.execute(
+    select(Favorite).where(
+        Favorite.user_id == user.id,
+        Favorite.planet_id == planet.id
+        )).scalar()
+    
+    if existing_favorite:
+        return jsonify({"Error": "Already favorite"}), 409
     
     new_favorite = Favorite(
         user_id= user.id,
@@ -34,7 +43,7 @@ def addFavoritePlanet(planet_id):
 @favorite.route("/favorite/people/<int:people_id>", methods=["POST"])
 @jwt_required()
 def addFavoritePeople(people_id):
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
 
     user = db.session.get(User, user_id)
 
@@ -45,6 +54,15 @@ def addFavoritePeople(people_id):
 
     if not people:
         return jsonify({"Error": "People not found"}), 404
+    
+    existing_favorite = db.session.execute(
+    select(Favorite).where(
+        Favorite.user_id == user.id,
+        Favorite.people_id == people.id
+        )).scalar()
+    
+    if existing_favorite:
+        return jsonify({"Error": "Already favorite"}), 409
     
     new_favorite = Favorite(
         user_id= user.id,
@@ -59,7 +77,7 @@ def addFavoritePeople(people_id):
 @favorite.route("/favorite/planet/<int:planet_id>", methods=["DELETE"])
 @jwt_required()
 def rmFavoritePlanet(planet_id):
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
 
     favorite = db.session.execute(select(Favorite).where(
         Favorite.user_id == user_id,
@@ -77,7 +95,7 @@ def rmFavoritePlanet(planet_id):
 @favorite.route("/favorite/people/<int:people_id>", methods=["DELETE"])
 @jwt_required()
 def rmFavoritePeople(people_id):
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
 
     favorite = db.session.execute(select(Favorite).where(
         Favorite.user_id == user_id,
