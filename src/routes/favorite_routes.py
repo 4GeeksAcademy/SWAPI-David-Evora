@@ -69,7 +69,7 @@ def rmFavoritePlanet(planet_id):
     if not favorite:
         return jsonify({"Error": "Favorite not found"}), 404
 
-    db.session.remove(favorite)
+    db.session.delete(favorite)
     db.session.commit()
 
     return jsonify({"Success": "Favorite deleted"}), 200
@@ -87,7 +87,7 @@ def rmFavoritePeople(people_id):
     if not favorite:
         return jsonify({"Error": "Favorite not found"}), 404
 
-    db.session.remove(favorite)
+    db.session.delete(favorite)
     db.session.commit()
 
     return jsonify({"Success": "Favorite deleted"}), 200

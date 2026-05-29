@@ -8,7 +8,7 @@ class User(db.Model):
     __tablename__ = "user"
     
     id: Mapped[int] = mapped_column(primary_key=True)
-    full_name: Mapped[str] = mapped_column(String(128), unique=False, nullable=False)
+    full_name: Mapped[str] = mapped_column(String(128), unique=False, nullable=True)
     username: Mapped[str] = mapped_column(String(16), unique=True, nullable=False)
     password: Mapped[str] = mapped_column(String(255), unique=False, nullable=False)
     email: Mapped[str] = mapped_column(String(128), unique=True, nullable=False)
@@ -21,5 +21,5 @@ class User(db.Model):
             "username": self.username,
             "email": self.email,
             "created": self.created,
-            "favorites": self.favorites
+            "favorites": [fav.to_dict() for fav in self.favorites]
         })

@@ -6,13 +6,13 @@ from database import db
 
 auth = Blueprint("auth", __name__)
 
-@auth.routes("/register", methods=["POST"])
+@auth.route("/register", methods=["POST"])
 def register():
     data = request.get_json()
 
-    username = data.username
-    email = data.email
-    password = data.password
+    username = data.get("username")
+    email = data.get("email")
+    password = data.get("password")
 
     if not username or not email or not password:
         return jsonify({"Error": "Username, password and email are required."}), 404
@@ -40,15 +40,15 @@ def register():
 
     return jsonify({"Message": "User created successfully."}), 201
 
-@auth.routes("/login", methods=["POST"])
+@auth.route("/login", methods=["POST"])
 def login():
     data = request.get_json()
 
-    email = data.email
-    password = data.password
+    email = data.get("email")
+    password = data.get("password")
 
     if not email or not password:
-        return jsonify({"Error": "Username, password and email are required."}), 404
+        return jsonify({"Error": "Email and password are required."}), 404
     
     user = db.session.execute(select(User).where(User.email == email)).scalar()
 
